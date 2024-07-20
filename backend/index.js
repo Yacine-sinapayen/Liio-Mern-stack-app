@@ -44,10 +44,6 @@ app.post("/books", async (request, response) => {
 app.get("/books", async (request, response) => {
   try {
     const books = await Book.find();
-    // Le return ci-dessous nous renvoie une collection de données
-    // return response.status(200).send(books);
-
-    // Le return ci-dessous nous renvoie un objet structuré d'une autre manière
     return response.status(200).send({
       count: books.length,
       data: books,
@@ -64,6 +60,35 @@ app.get("/books/:id", async (request, response) => {
     const { id } = request.params;
     const book = await Book.findById(id);
     return response.status(200).json(book);
+  } catch (error) {
+    console.log(error.message);
+    response.status(500).send({ message: error.message });
+  }
+});
+
+// Roue PUT book by id
+app.put("/books/:id", async (request, response) => {
+  try {
+    if (
+      !request.body.title ||
+      !request.body.author ||
+      !request.body.publishYear
+    ) {
+      return response.status(400).send({
+        message:
+          "Veuillez renseigner tous les champs : titre, auteur, année de publication",
+      });
+    }
+
+    const { id } = request.params;
+
+    const result = await Book.findByIdAndUpdate(id, request.body);
+
+    if (!result) {
+      return response.status(404).send({ message: "Book not found" });
+    }
+
+    return response.status(200).send({ message: "Book updated successfully" });
   } catch (error) {
     console.log(error.message);
     response.status(500).send({ message: error.message });
