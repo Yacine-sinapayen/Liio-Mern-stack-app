@@ -13,7 +13,7 @@ app.get("/", (req, response) => {
   return response.status(234).send("Hello route get");
 });
 
-// CREATE Route to save a new book
+// POST book
 app.post("/books", async (request, response) => {
   try {
     if (
@@ -54,7 +54,7 @@ app.get("/books", async (request, response) => {
   }
 });
 
-// Route GET book by id
+// GET one book
 app.get("/books/:id", async (request, response) => {
   try {
     const { id } = request.params;
@@ -66,7 +66,7 @@ app.get("/books/:id", async (request, response) => {
   }
 });
 
-// Roue PUT book by id
+// PUT one book 
 app.put("/books/:id", async (request, response) => {
   try {
     if (
@@ -90,6 +90,23 @@ app.put("/books/:id", async (request, response) => {
 
     return response.status(200).send({ message: "Book updated successfully" });
   } catch (error) {
+    console.log(error.message);
+    response.status(500).send({ message: error.message });
+  }
+});
+
+// DELETE one book
+app.delete("/books/:id", async (request, response) => {
+  try{
+    const { id } = request.params;
+    const result = await Book.findByIdAndDelete(id);
+
+    if (!result) {
+      return response.status(404).send({ message: "Book not found" });
+    }
+
+    return response.status(200).send({ message: "Book deleted successfully" });
+  }catch(error){
     console.log(error.message);
     response.status(500).send({ message: error.message });
   }
