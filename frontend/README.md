@@ -12,5 +12,5 @@ Currently, two official plugins are available:
 `npm i`
 
 # Run project frontend :
-`npm sun dev`
+`npm run dev`
 28`50
