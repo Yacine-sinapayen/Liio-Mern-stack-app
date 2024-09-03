@@ -12,5 +12,5 @@ Currently, two official plugins are available:
 `npm i`
 
 # Run project frontend :
-`npm run dev`
-28`50
+`npm run dev``
+46`
